@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎵 Secure Music Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 30px 40px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 1.8em;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #ccc;
+    }
+
+    .captcha {
+      margin: 20px 0;
+    }
+
+    .captcha span {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      width: 80px;
+      margin-left: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 25px;
+      background: #00ffc8;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #00d4a5;
+      transform: scale(1.05);
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #ff6f61;
+    }
+
+    #audioPlayer {
+      margin-top: 30px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔐 Secure Audio Access</h2>
+    <p>Complete the challenge to unlock your track.</p>
+
+    <div class="captcha">
+      <span id="num1">?</span> + <span id="num2">?</span> = 
+      <input type="number" id="answer" placeholder="??"/>
+      <br />
+      <button onclick="checkCaptcha()">Verify</button>
+      <div id="message"></div>
+    </div>
+
+    <div id="audioPlayer" style="display: none;">
+      <h3>🎶 Your Track:</h3>
+      <audio controls>
+        <source src="music.mp3" type="audio/mp3" />
+        Your browser does not support the audio tag.
+      </audio>
+    </div>
+  </div>
+
+  <script>
+    let num1, num2, correctAnswer;
+
+    function generateCaptcha() {
+      num1 = Math.floor(Math.random() * 10) + 1;
+      num2 = Math.floor(Math.random() * 10) + 1;
+      correctAnswer = num1 + num2;
+      document.getElementById("num1").innerText = num1;
+      document.getElementById("num2").innerText = num2;
+      document.getElementById("answer").value = "";
+      document.getElementById("message").innerText = "";
+    }
+
+    function checkCaptcha() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      const msg = document.getElementById("message");
+
+      if (userAnswer === "") {
+        msg.innerText = "⛔ Please enter a number.";
+        return;
+      }
+
+      if (parseInt(userAnswer) === correctAnswer) {
+        document.querySelector(".captcha").style.display = "none";
+        document.getElementById("audioPlayer").style.display = "block";
+        msg.style.color = "#00ffcc";
+        msg.innerText = "✅ Correct! Music unlocked.";
+      } else {
+        msg.innerText = "❌ Wrong answer. Try again.";
+        msg.style.color = "#ff6f61";
+        generateCaptcha();
+      }
+    }
+
+    // Generate a CAPTCHA on page load
+    generateCaptcha();
+  </script>
+</body>
+</html>
